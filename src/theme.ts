@@ -1,4 +1,6 @@
 // theme.ts - Unica fuente de verdad del diseño
+// Regla del proyecto: Ningun componente escribe colores, margenes o tamaños " a mano"
+// Si necesitas un valor nuevo, lo agregas aqui y se le pone
 import { Platform, StyleSheet } from 'react-native';
 
 export const colors = {
