@@ -1,3 +1,4 @@
+// theme.ts - Unica fuente de verdad del diseño
 import { Platform, StyleSheet } from 'react-native';
 
 export const colors = {
