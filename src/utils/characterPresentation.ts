@@ -1,36 +1,3 @@
-import { colors } from '../theme';
-import type { CharacterGender, CharacterStatus } from '../types/character'; 
-
-export interface StatusPresentation {
-  label: string;
-  indicatorColor: string;
-  backgroundColor: string;
-}
-
-export const statusPresentationByStatus: Record<CharacterStatus, StatusPresentation> = {
-  Alive: {
-    label: 'Muerto',
-    indicatorColor: colors.statusAlive,
-    backgroundColor: colors.statusAliveSoft,
-  },
-  Dead: {
-    label: 'Vivo',
-    indicatorColor: colors.statusDead,
-    backgroundColor: colors.statusDeadSoft,
-  },
-  unknown: {
-    label: 'Desconocido',
-    indicatorColor: colors.statusUnknown,
-    backgroundColor: colors.statusUnknownSoft,
-  },
-
-};
-
-/** La API usa 'unknown' como texto cuando no conoce el origen o la ubicación. */
-export const formatLocationName = (locationName: string): string => {
-    return locationName === 'unknown' ? 'Desconocido' : locationName;
-}
-
 /**
  * characterPresentation.ts — Traduce los valores crudos de la API a lo que ve el usuario.
  *
@@ -85,4 +52,69 @@ export const formatLocationName = (locationName: string): string => {
  * Por eso `Record<CharacterStatus, ...>` obliga a TypeScript a exigir una entrada para
  * CADA valor de la unión. Si la API agregara un estado nuevo y lo sumáramos al tipo,
  * el compilador marcaría error aquí hasta que le asignemos etiqueta y color.
+ */
+import { colors } from '../theme';
+import type { CharacterGender, CharacterStatus } from '../types/character';
+
+export interface StatusPresentation {
+  label: string;
+  /** Color fuerte: el punto indicador. */
+  indicatorColor: string;
+  /** Color suave: el fondo de la "chip" en el detalle. */
+  backgroundColor: string;
+}
+
+export const statusPresentationByStatus: Record<CharacterStatus, StatusPresentation> = {
+  Alive: {
+    label: 'Vivo',
+    indicatorColor: colors.statusAlive,
+    backgroundColor: colors.statusAliveSoft,
+  },
+  Dead: {
+    label: 'Muerto',
+    indicatorColor: colors.statusDead,
+    backgroundColor: colors.statusDeadSoft,
+  },
+  unknown: {
+    label: 'Desconocido',
+    indicatorColor: colors.statusUnknown,
+    backgroundColor: colors.statusUnknownSoft,
+  },
+};
+
+export const genderLabelByGender: Record<CharacterGender, string> = {
+  Female: 'Femenino',
+  Male: 'Masculino',
+  Genderless: 'Sin género',
+  unknown: 'Desconocido',
+};
+
+/** La API usa 'unknown' como texto cuando no conoce el origen o la ubicación. */
+export const formatLocationName = (locationName: string): string => {
+  return locationName === 'unknown' ? 'Desconocido' : locationName;
+};
+/*
+ * ¿Por qué todo esto va en `utils/` y no en `types/`?
+ *
+ * 1) `types/` solo contiene TIPOS; aquí hay CÓDIGO que se ejecuta.
+ *    Los tipos (`type`, `interface`) desaparecen al compilar: no existen en el
+ *    bundle de la app. En cambio `statusPresentationByStatus`, `genderLabelByGender`
+ *    y `formatLocationName` son valores y funciones reales que viven en ejecución.
+ *    Mezclarlos haría que `types/` dejara de ser "solo descripciones de datos".
+ *
+ * 2) `types/` describe la API; este archivo describe la INTERFAZ.
+ *    `character.ts` dice cómo son los datos tal como llegan ('Alive', 'Female'...).
+ *    Este archivo decide cómo se MUESTRAN: textos en español y colores del theme.
+ *    Son responsabilidades distintas: si cambiamos el diseño o el idioma, no
+ *    debería tocarse el archivo que describe la API, y viceversa.
+ *
+ * 3) Dirección de las dependencias.
+ *    Este archivo importa `colors` desde `../theme`. Si viviera en `types/`, los
+ *    tipos pasarían a depender del theme, y cualquier archivo que solo quisiera
+ *    el tipo `Character` arrastraría también esa dependencia. La regla es:
+ *    `utils/` → puede importar de `types/`; `types/` → no importa de nadie.
+ *
+ * 4) ¿Y la interfaz `StatusPresentation`? También es un tipo, pero no describe la
+ *    API sino la forma de presentar un estado. Solo tiene sentido junto a
+ *    `statusPresentationByStatus`, así que se queda aquí, al lado de quien la usa.
  */
