@@ -55,3 +55,7 @@ export interface CharacterPageResponse {
   info: PaginationInfo;
   results: Character[];
 }
+
+
+// Record
+// ana: 20, juan: 30
