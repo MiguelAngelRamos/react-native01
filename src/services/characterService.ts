@@ -1,4 +1,4 @@
-import type {Character, CharacterPageResponse} from '../types/characters';
+import type {Character, CharacterPageResponse} from '../types/character';
 
 const API_BASE_URL = 'https://rickandmortyapi.com/api';
 const INITIAL_PAGE_COUNT = 3;

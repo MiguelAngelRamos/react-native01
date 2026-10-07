@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View } from 'react-native';
 import {colors, fontSizes, fontWeights, radii, sizes, spacing} from '../theme';
-import type { CharacterStatus } from '../types/characters';
+import type { CharacterStatus } from '../types/character';
 
 
 export const StatusIndicator = ({status, variant ='inline'}: StatusIndicatorProps) => {
