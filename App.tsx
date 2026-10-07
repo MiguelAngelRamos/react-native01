@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { CharacterListScreen } from './src/screens/CharacterListScreen';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Curso de React Native Kibernum</Text>
-      <StatusBar style="auto" />
-    </View>
+  <SafeAreaProvider>
+    <CharacterListScreen/>
+  </SafeAreaProvider>
   );
 }
 
